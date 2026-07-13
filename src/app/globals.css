@@ -1,0 +1,76 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: #fafafa;
+    --foreground: #0a0a0f;
+    --card: rgba(255, 255, 255, 0.8);
+    --card-border: rgba(0, 0, 0, 0.08);
+    --primary: #0891b2;
+    --primary-glow: rgba(8, 145, 178, 0.15);
+    --secondary: #7c3aed;
+    --muted: #71717a;
+    --dot-color: rgba(0, 0, 0, 0.08);
+    --nav-bg: rgba(255, 255, 255, 0.7);
+  }
+
+  .dark {
+    --background: #0a0a0f;
+    --foreground: #fafafa;
+    --card: rgba(255, 255, 255, 0.03);
+    --card-border: rgba(255, 255, 255, 0.06);
+    --primary: #00f0ff;
+    --primary-glow: rgba(0, 240, 255, 0.15);
+    --secondary: #7c3aed;
+    --muted: #a1a1aa;
+    --dot-color: rgba(255, 255, 255, 0.04);
+    --nav-bg: rgba(10, 10, 15, 0.7);
+  }
+}
+
+@layer base {
+  * {
+    border-color: var(--card-border);
+  }
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+@layer utilities {
+  .bg-grid {
+    background-image: radial-gradient(circle, var(--dot-color) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+
+  .bg-glow {
+    background: radial-gradient(ellipse 80% 50% at 50% -20%, var(--primary-glow), transparent);
+  }
+
+  .glass {
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    background-color: var(--card);
+    border: 1px solid var(--card-border);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.36);
+  }
+
+  .glass-hover {
+    transition: all 0.3s ease;
+  }
+  .glass-hover:hover {
+    border-color: color-mix(in srgb, var(--primary) 30%, transparent);
+    box-shadow: 0 0 20px var(--primary-glow);
+  }
+
+  .text-gradient {
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    background-image: linear-gradient(to right, var(--primary), var(--secondary));
+  }
+}

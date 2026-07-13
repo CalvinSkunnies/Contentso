@@ -1,0 +1,12 @@
+{
+  "functions": {
+    "api/**/*.ts": {
+      "memory": 512,
+      "maxDuration": 30
+    }
+  },
+  "framework": "nextjs",
+  "buildCommand": "next build",
+  "installCommand": "npm install",
+  "outputDirectory": ".next"
+}

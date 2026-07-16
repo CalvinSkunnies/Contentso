@@ -4,7 +4,7 @@ import Link from "next/link"
 import { useSession, signOut } from "next-auth/react"
 import { Button } from "@/components/ui/button"
 import { ModeToggle } from "@/components/mode-toggle"
-import { LogOut, LayoutDashboard, Sparkles, Menu, X } from "lucide-react"
+import { LogOut, LayoutDashboard, Sparkles, Menu, X, Terminal } from "lucide-react"
 import { useState } from "react"
 import { cn } from "@/lib/utils"
 
@@ -47,6 +47,12 @@ export function Navbar() {
             <ModeToggle />
             {session ? (
               <div className="hidden md:flex items-center gap-2">
+                <Link href="/dashboard/ai">
+                  <Button variant="ghost" size="sm">
+                    <Terminal className="w-4 h-4 mr-1.5" />
+                    AI Terminal
+                  </Button>
+                </Link>
                 <Link href="/dashboard">
                   <Button variant="outline" size="sm">
                     <LayoutDashboard className="w-4 h-4 mr-2" />
@@ -95,6 +101,12 @@ export function Navbar() {
           <div className="pt-2 border-t border-[var(--card-border)]">
             {session ? (
               <div className="space-y-2">
+                <Link href="/dashboard/ai" onClick={() => setMobileOpen(false)}>
+                  <Button variant="ghost" className="w-full">
+                    <Terminal className="w-4 h-4 mr-2" />
+                    AI Terminal
+                  </Button>
+                </Link>
                 <Link href="/dashboard" onClick={() => setMobileOpen(false)}>
                   <Button variant="outline" className="w-full">
                     <LayoutDashboard className="w-4 h-4 mr-2" />

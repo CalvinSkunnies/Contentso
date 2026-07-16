@@ -4,18 +4,16 @@ import { useDroppable } from "@dnd-kit/core"
 import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable"
 import { cn } from "@/lib/utils"
 import { ContentCard } from "@/components/calendar/content-card"
-import { Plus } from "lucide-react"
 import type { ContentItem, ContentStatus } from "@/lib/calendar-types"
 import { STATUS_CONFIG } from "@/lib/calendar-types"
 
 interface PipelineColumnProps {
   status: ContentStatus
   items: ContentItem[]
-  onAdd?: () => void
   onDelete?: (id: string) => void
 }
 
-export function PipelineColumn({ status, items, onAdd, onDelete }: PipelineColumnProps) {
+export function PipelineColumn({ status, items, onDelete }: PipelineColumnProps) {
   const { setNodeRef, isOver } = useDroppable({
     id: `pipeline-${status}`,
     data: { type: "pipeline", status },
@@ -43,7 +41,7 @@ export function PipelineColumn({ status, items, onAdd, onDelete }: PipelineColum
       <div
         ref={setNodeRef}
         className={cn(
-          "flex-1 p-2 space-y-2 transition-colors min-h-[120px]",
+          "flex-1 p-2 space-y-2 transition-colors min-h-[500px]",
           isOver && "bg-[var(--primary)]/5"
         )}
       >
@@ -58,17 +56,6 @@ export function PipelineColumn({ status, items, onAdd, onDelete }: PipelineColum
             ))
           )}
         </SortableContext>
-
-        {onAdd && (
-          <button
-            onClick={onAdd}
-            className="w-full py-2 rounded-xl border border-dashed border-[var(--card-border)] text-xs text-[var(--muted)] hover:border-[var(--primary)]/30 hover:text-[var(--primary)] transition-all duration-200 flex items-center justify-center gap-1"
-            type="button"
-          >
-            <Plus className="w-3 h-3" />
-            Add
-          </button>
-        )}
       </div>
     </div>
   )

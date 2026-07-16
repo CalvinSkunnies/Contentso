@@ -125,15 +125,22 @@ export function AddContentDialog({ open, onClose, onAdd }: AddContentDialogProps
                   <label className="block text-xs font-medium text-[var(--muted)] mb-1.5">
                     Status
                   </label>
-                  <select
-                    value={status}
-                    onChange={(e) => setStatus(e.target.value as ContentStatus)}
-                    className="w-full h-9 rounded-xl bg-[var(--card)] border border-[var(--card-border)] px-2.5 text-xs outline-none focus:border-[var(--primary)]/50 transition-colors"
-                  >
+                  <div className="flex flex-wrap gap-1.5">
                     {statuses.map((s) => (
-                      <option key={s.value} value={s.value}>{s.label}</option>
+                      <button
+                        key={s.value}
+                        type="button"
+                        onClick={() => setStatus(s.value)}
+                        className={`px-2.5 h-7 rounded-lg text-[11px] font-medium border transition-all ${
+                          status === s.value
+                            ? "border-[var(--primary)]/30 bg-[var(--primary)]/5 text-[var(--primary)]"
+                            : "border-[var(--card-border)] text-[var(--muted)] hover:border-[var(--card-border)]/50"
+                        }`}
+                      >
+                        {s.label}
+                      </button>
                     ))}
-                  </select>
+                  </div>
                 </div>
               </div>
 
@@ -181,7 +188,7 @@ export function AddContentDialog({ open, onClose, onAdd }: AddContentDialogProps
                   Cancel
                 </Button>
                 <Button type="submit" className="flex-1" disabled={!title.trim()}>
-                  Add to Calendar
+                  Add Content
                 </Button>
               </div>
             </form>

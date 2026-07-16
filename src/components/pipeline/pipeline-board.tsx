@@ -16,8 +16,9 @@ import { sortableKeyboardCoordinates } from "@dnd-kit/sortable"
 import { PipelineColumn } from "./pipeline-column"
 import { AddContentDialog } from "@/components/calendar/add-content-dialog"
 import { DragOverlayContent } from "@/components/calendar/content-card"
-import { generateId, type ContentItem, type Platform, type ContentStatus, STATUS_CONFIG } from "@/lib/calendar-types"
-import { cn } from "@/lib/utils"
+import { generateId, type ContentItem, type Platform, type ContentStatus } from "@/lib/calendar-types"
+import { Button } from "@/components/ui/button"
+import { Plus } from "lucide-react"
 
 const PIPELINE_STATUSES: ContentStatus[] = ["idea", "scripted", "filmed", "editing", "scheduled", "posted"]
 
@@ -90,6 +91,20 @@ export function PipelineBoard() {
 
   return (
     <div>
+      <div className="flex items-center justify-between mb-3">
+        <span className="text-xs text-[var(--muted)]">{items.length} item{items.length !== 1 ? "s" : ""} in pipeline</span>
+        <Button
+          size="sm"
+          onClick={() => {
+            setAddDialogStatus("idea")
+            setAddDialogOpen(true)
+          }}
+        >
+          <Plus className="w-4 h-4 mr-1.5" />
+          Add Content
+        </Button>
+      </div>
+
       <DndContext
         sensors={sensors}
         collisionDetection={closestCorners}
@@ -106,10 +121,6 @@ export function PipelineBoard() {
                 key={status}
                 status={status}
                 items={statusItems}
-                onAdd={() => {
-                  setAddDialogStatus(status)
-                  setAddDialogOpen(true)
-                }}
                 onDelete={handleDelete}
               />
             )

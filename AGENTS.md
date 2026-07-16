@@ -76,6 +76,17 @@ tailwind.config.ts
 .github/workflows/ci.yml
 ```
 
+## AI Terminal (Gemini)
+- **Provider**: Google Gemini 2.0 Flash (free tier: 60 req/min)
+- **SDK**: `@google/generative-ai`
+- **Env var**: `GOOGLE_GEMINI_API_KEY` (get from https://aistudio.google.com/app/apikey)
+- **Endpoint**: `POST /api/ai/chat` — chat with history support
+- **Endpoint**: `POST /api/ai/analyze` — script scoring (hook, pacing, viral, clarity)
+- **Page**: `/dashboard/ai` — terminal-style chat with quick actions
+- **Features**: hook generator, script writer, idea brainstorm, content coach, script analyzer
+- **Prompt templates**: `src/lib/prompts.ts` (5 system prompts)
+- **UI**: terminal-style with message bubbles, quick-action buttons, score rings
+
 ## Auth Setup
 - Google OAuth via NextAuth v4
 - Route handler pattern: `const handler = NextAuth(authOptions); export { handler as GET, handler as POST }`

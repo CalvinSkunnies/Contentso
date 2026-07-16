@@ -27,7 +27,7 @@ const quickActions = [
     title: "Pipeline Board",
     desc: "Track from idea to posted",
     icon: KanbanSquare,
-    href: "#",
+    href: "/dashboard/pipeline",
     color: "text-emerald-500",
   },
   {

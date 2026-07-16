@@ -11,15 +11,33 @@ Content planning OS for short-form video creators (IG Reels + TikTok). Pre-produ
 - **Portfolio**: https://calvinskunnies.my.canva.site/
 - **GitHub**: https://github.com/CalvinSkunnies
 
+## Navbar
+- For authenticated users: only shows Dashboard button + Sign Out (no menu button)
+- Landing nav links (Features, Why, Comparison) hidden when signed in
+- Calendar & AI Terminal accessible only from inside dashboard cards
+
+## Back Button
+- **Component**: `src/components/back-button.tsx`
+- Shows arrow + "Dashboard" link at top of calendar and pipeline pages
+- Sits inside the page content area, not in the header/navbar
+
 ## Calendar (Drag & Drop)
 - **Library**: @dnd-kit/core + @dnd-kit/sortable
 - **Page**: `/dashboard/calendar`
 - **Structure**: 7-column weekly grid (Sun-Sat)
-- **Cards**: Draggable content items, color-coded (pink=IG Reels, teal=TikTok)
+- **Cards**: Draggable content items, color-coded (pink=IG Reels, teal=TikTok), now show content preview (FileText icon), media reference (Image icon), and notes
 - **Status**: Idea → Scripted → Filmed → Editing → Scheduled → Posted
-- **Features**: cross-day drag & drop, add dialog with platform/status picker, week navigation, today button, drag overlay with glow effect
-- **Types**: `src/lib/calendar-types.ts` (ContentItem, Platform, ContentStatus)
+- **Features**: cross-day drag & drop, add dialog with platform/status picker, content/textarea, media/URL, notes fields, week navigation, today button, drag overlay with glow effect
+- **Types**: `src/lib/calendar-types.ts` (ContentItem: id, title, platform, status, day, content?, media?, notes?)
 - **Components**: `WeekView` (DndContext), `DayColumn` (droppable), `ContentCard` (sortable), `AddContentDialog`
+
+## Pipeline Board (Kanban)
+- **Page**: `/dashboard/pipeline`
+- **Structure**: 6 horizontal-scrolling kanban columns: Idea → Scripted → Filmed → Editing → Scheduled → Posted
+- **Cards**: Reuses `ContentCard` from calendar — same drag & drop, color-coded platform badges, content/media/notes preview
+- **Features**: drag between columns (changes status), add button per column opens AddContentDialog with pre-set status, drag overlay, empty-state "Drop here" placeholders
+- **Components**: `PipelineBoard` (DndContext, 6 columns), `PipelineColumn` (droppable + SortableContext)
+- Shares same types as Calendar (ContentItem + ContentStatus + Platform)
 
 ## Architecture
 - **Framework**: Next.js 14 (App Router) + TypeScript
@@ -61,18 +79,24 @@ src/
     layout.tsx              # Root: Inter + JetBrains Mono, Providers, Navbar, Footer
     globals.css             # Dark/light CSS variables, glass/grid/glow utilities
     page.tsx                # Landing page (Hero → Features → Q&A → Comparison → CTA)
-    dashboard/page.tsx      # Protected dashboard (client-side auth check)
+    dashboard/page.tsx      # Protected dashboard with quick-action cards (Calendar, Pipeline, etc.)
+    dashboard/calendar/page.tsx  # Content Calendar with back button
+    dashboard/pipeline/page.tsx  # Pipeline Board with back button
     auth/
       signin/page.tsx       # Google sign-in with official Google logo SVG
       error/page.tsx        # Auth error display
     api/auth/[...nextauth]/route.ts  # NextAuth handler
   components/
+    back-button.tsx         # Arrow + "Dashboard" link for sub-pages
     ui/                     # shadcn primitives (button, card, badge)
     landing/                # Landing sections (hero, features, why-contenso, comparison, cta-section)
-    navbar.tsx              # Glass nav with auth state + mobile menu + mode toggle
+    navbar.tsx              # Glass nav: Dashboard + Sign Out for authed, landing links for guests
     footer.tsx              # "Built by Calvin Skunnies" + GitHub + Portfolio links
     providers.tsx           # SessionProvider + ThemeProvider
     mode-toggle.tsx         # Dark/bright toggle
+    pipeline/               # Kanban Pipeline Board
+      pipeline-board.tsx    # DndContext + 6 status columns
+      pipeline-column.tsx   # Droppable column per status
   lib/
     auth.ts                 # NextAuth config (authOptions)
     utils.ts                # cn() helper

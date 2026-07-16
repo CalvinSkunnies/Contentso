@@ -125,22 +125,15 @@ export function AddContentDialog({ open, onClose, onAdd }: AddContentDialogProps
                   <label className="block text-xs font-medium text-[var(--muted)] mb-1.5">
                     Status
                   </label>
-                  <div className="flex flex-wrap gap-1.5">
+                  <select
+                    value={status}
+                    onChange={(e) => setStatus(e.target.value as ContentStatus)}
+                    className="w-full h-9 rounded-xl bg-[var(--card)] border border-[var(--card-border)] px-2.5 text-xs outline-none focus:border-[var(--primary)]/50 transition-colors"
+                  >
                     {statuses.map((s) => (
-                      <button
-                        key={s.value}
-                        type="button"
-                        onClick={() => setStatus(s.value)}
-                        className={`px-2.5 h-7 rounded-lg text-[11px] font-medium border transition-all ${
-                          status === s.value
-                            ? "border-[var(--primary)]/30 bg-[var(--primary)]/5 text-[var(--primary)]"
-                            : "border-[var(--card-border)] text-[var(--muted)] hover:border-[var(--card-border)]/50"
-                        }`}
-                      >
-                        {s.label}
-                      </button>
+                      <option key={s.value} value={s.value}>{s.label}</option>
                     ))}
-                  </div>
+                  </select>
                 </div>
               </div>
 

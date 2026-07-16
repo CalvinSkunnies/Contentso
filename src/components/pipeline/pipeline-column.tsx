@@ -41,7 +41,7 @@ export function PipelineColumn({ status, items, onDelete }: PipelineColumnProps)
       <div
         ref={setNodeRef}
         className={cn(
-          "flex-1 p-2 space-y-2 transition-colors min-h-[500px]",
+          "flex-1 p-2 space-y-2 transition-colors min-h-[380px]",
           isOver && "bg-[var(--primary)]/5"
         )}
       >

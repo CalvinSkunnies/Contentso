@@ -13,7 +13,7 @@ const quickActions = [
     title: "Content Calendar",
     desc: "Plan your week with drag & drop",
     icon: CalendarDays,
-    href: "#",
+    href: "/dashboard/calendar",
     color: "text-[var(--primary)]",
   },
   {

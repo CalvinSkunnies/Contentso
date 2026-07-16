@@ -11,6 +11,16 @@ Content planning OS for short-form video creators (IG Reels + TikTok). Pre-produ
 - **Portfolio**: https://calvinskunnies.my.canva.site/
 - **GitHub**: https://github.com/CalvinSkunnies
 
+## Calendar (Drag & Drop)
+- **Library**: @dnd-kit/core + @dnd-kit/sortable
+- **Page**: `/dashboard/calendar`
+- **Structure**: 7-column weekly grid (Sun-Sat)
+- **Cards**: Draggable content items, color-coded (pink=IG Reels, teal=TikTok)
+- **Status**: Idea → Scripted → Filmed → Editing → Scheduled → Posted
+- **Features**: cross-day drag & drop, add dialog with platform/status picker, week navigation, today button, drag overlay with glow effect
+- **Types**: `src/lib/calendar-types.ts` (ContentItem, Platform, ContentStatus)
+- **Components**: `WeekView` (DndContext), `DayColumn` (droppable), `ContentCard` (sortable), `AddContentDialog`
+
 ## Architecture
 - **Framework**: Next.js 14 (App Router) + TypeScript
 - **Styling**: Tailwind CSS 3 + shadcn/ui primitives + glass-morphism design

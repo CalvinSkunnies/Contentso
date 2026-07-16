@@ -134,7 +134,7 @@ export function WeekView() {
     [items]
   )
 
-  const handleAdd = (day: number, data: { title: string; platform: Platform; status: ContentStatus; notes?: string }) => {
+  const handleAdd = (day: number, data: { title: string; platform: Platform; status: ContentStatus; content?: string; media?: string; notes?: string }) => {
     const newItem: ContentItem = {
       id: generateId(),
       day,

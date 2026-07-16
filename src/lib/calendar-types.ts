@@ -7,6 +7,8 @@ export interface ContentItem {
   platform: Platform
   status: ContentStatus
   day: number
+  content?: string
+  media?: string
   notes?: string
 }
 

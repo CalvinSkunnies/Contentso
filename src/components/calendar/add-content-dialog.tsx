@@ -9,7 +9,7 @@ import { PLATFORM_CONFIG, type Platform, type ContentStatus, STATUS_CONFIG } fro
 interface AddContentDialogProps {
   open: boolean
   onClose: () => void
-  onAdd: (data: { title: string; platform: Platform; status: ContentStatus; notes?: string }) => void
+  onAdd: (data: { title: string; platform: Platform; status: ContentStatus; content?: string; media?: string; notes?: string }) => void
 }
 
 const statuses: { value: ContentStatus; label: string }[] = [
@@ -24,13 +24,24 @@ export function AddContentDialog({ open, onClose, onAdd }: AddContentDialogProps
   const [title, setTitle] = useState("")
   const [platform, setPlatform] = useState<Platform>("ig")
   const [status, setStatus] = useState<ContentStatus>("idea")
+  const [content, setContent] = useState("")
+  const [media, setMedia] = useState("")
   const [notes, setNotes] = useState("")
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (!title.trim()) return
-    onAdd({ title: title.trim(), platform, status, notes: notes.trim() || undefined })
+    onAdd({
+      title: title.trim(),
+      platform,
+      status,
+      content: content.trim() || undefined,
+      media: media.trim() || undefined,
+      notes: notes.trim() || undefined,
+    })
     setTitle("")
+    setContent("")
+    setMedia("")
     setNotes("")
     setPlatform("ig")
     setStatus("idea")
@@ -52,7 +63,7 @@ export function AddContentDialog({ open, onClose, onAdd }: AddContentDialogProps
             initial={{ opacity: 0, scale: 0.95, y: 10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 10 }}
-            className="relative glass rounded-2xl p-6 w-full max-w-md mx-4 shadow-glow"
+            className="relative glass rounded-2xl p-6 w-full max-w-lg mx-4 shadow-glow"
           >
             <button
               onClick={onClose}
@@ -124,6 +135,32 @@ export function AddContentDialog({ open, onClose, onAdd }: AddContentDialogProps
                     ))}
                   </select>
                 </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-medium text-[var(--muted)] mb-1.5">
+                  Content <span className="text-[var(--muted)]/50">(optional)</span>
+                </label>
+                <textarea
+                  value={content}
+                  onChange={(e) => setContent(e.target.value)}
+                  placeholder="Script, hook, or description..."
+                  rows={3}
+                  className="w-full rounded-xl bg-[var(--card)] border border-[var(--card-border)] px-3 py-2 text-sm outline-none focus:border-[var(--primary)]/50 transition-colors resize-none"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-medium text-[var(--muted)] mb-1.5">
+                  Media <span className="text-[var(--muted)]/50">(optional)</span>
+                </label>
+                <input
+                  type="text"
+                  value={media}
+                  onChange={(e) => setMedia(e.target.value)}
+                  placeholder="Media URL or file reference..."
+                  className="w-full h-10 rounded-xl bg-[var(--card)] border border-[var(--card-border)] px-3 text-sm outline-none focus:border-[var(--primary)]/50 transition-colors"
+                />
               </div>
 
               <div>

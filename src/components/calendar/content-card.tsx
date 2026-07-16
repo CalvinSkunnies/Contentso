@@ -3,7 +3,7 @@
 import { forwardRef, type HTMLAttributes } from "react"
 import { useSortable } from "@dnd-kit/sortable"
 import { CSS } from "@dnd-kit/utilities"
-import { GripVertical, Trash2 } from "lucide-react"
+import { GripVertical, Trash2, FileText, Image } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { PLATFORM_CONFIG, STATUS_CONFIG, type ContentItem } from "@/lib/calendar-types"
 
@@ -50,8 +50,20 @@ export function ContentCard({ item, onDelete, ...props }: ContentCardProps) {
           </button>
           <div className="min-w-0 flex-1">
             <p className="text-sm font-medium truncate">{item.title}</p>
+            {item.content && (
+              <p className="text-xs text-[var(--muted)] truncate mt-0.5">
+                <FileText className="w-3 h-3 inline mr-1 -mt-0.5" />
+                {item.content.slice(0, 60)}{item.content.length > 60 ? "..." : ""}
+              </p>
+            )}
+            {item.media && (
+              <p className="text-xs text-[var(--muted)] truncate mt-0.5">
+                <Image className="w-3 h-3 inline mr-1 -mt-0.5" />
+                {item.media}
+              </p>
+            )}
             {item.notes && (
-              <p className="text-xs text-[var(--muted)] truncate mt-0.5">{item.notes}</p>
+              <p className="text-xs text-[var(--muted)] truncate mt-0.5 italic">{item.notes}</p>
             )}
           </div>
         </div>
@@ -91,8 +103,20 @@ export function DragOverlayContent({ item }: { item: ContentItem }) {
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0 flex-1">
           <p className="text-sm font-medium truncate">{item.title}</p>
+          {item.content && (
+            <p className="text-xs text-[var(--muted)] truncate mt-0.5">
+              <FileText className="w-3 h-3 inline mr-1 -mt-0.5" />
+              {item.content.slice(0, 60)}{item.content.length > 60 ? "..." : ""}
+            </p>
+          )}
+          {item.media && (
+            <p className="text-xs text-[var(--muted)] truncate mt-0.5">
+              <Image className="w-3 h-3 inline mr-1 -mt-0.5" />
+              {item.media}
+            </p>
+          )}
           {item.notes && (
-            <p className="text-xs text-[var(--muted)] truncate mt-0.5">{item.notes}</p>
+            <p className="text-xs text-[var(--muted)] truncate mt-0.5 italic">{item.notes}</p>
           )}
         </div>
         <span className={cn("text-xs font-medium shrink-0", statusCfg.color)}>

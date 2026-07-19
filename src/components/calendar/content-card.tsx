@@ -3,16 +3,18 @@
 import { forwardRef, type HTMLAttributes } from "react"
 import { useSortable } from "@dnd-kit/sortable"
 import { CSS } from "@dnd-kit/utilities"
-import { GripVertical, Trash2, FileText, Image } from "lucide-react"
+import { GripVertical, Trash2, FileText, Image, ScrollText } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { PLATFORM_CONFIG, STATUS_CONFIG, type ContentItem } from "@/lib/calendar-types"
 
 interface ContentCardProps extends HTMLAttributes<HTMLDivElement> {
   item: ContentItem
   onDelete?: (id: string) => void
+  hasScript?: boolean
+  onViewScript?: (id: string) => void
 }
 
-export function ContentCard({ item, onDelete, ...props }: ContentCardProps) {
+export function ContentCard({ item, onDelete, hasScript, onViewScript, ...props }: ContentCardProps) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: item.id,
     data: { type: "content", item, day: item.day },
@@ -85,10 +87,23 @@ export function ContentCard({ item, onDelete, ...props }: ContentCardProps) {
           )}
         </div>
       </div>
-      <div className="flex items-center gap-2 mt-2">
+        <div className="flex items-center gap-2 mt-2">
         <div className={cn("text-[10px] font-medium px-1.5 py-0.5 rounded-md border", platformCfg.bg)}>
           {platformCfg.label}
         </div>
+        {hasScript && (
+          <button
+            onClick={(e) => {
+              e.stopPropagation()
+              onViewScript?.(item.id)
+            }}
+            className="text-[10px] text-[var(--secondary)] hover:underline flex items-center gap-0.5"
+            type="button"
+          >
+            <ScrollText className="w-3 h-3" />
+            Script
+          </button>
+        )}
       </div>
     </div>
   )

@@ -3,6 +3,7 @@
 import { ThemeProvider } from "next-themes"
 import { SessionProvider } from "next-auth/react"
 import { type ReactNode } from "react"
+import { AppProvider } from "@/context/app-context"
 
 export function Providers({ children }: { children: ReactNode }) {
   return (
@@ -13,7 +14,9 @@ export function Providers({ children }: { children: ReactNode }) {
         enableSystem={false}
         storageKey="contentso-theme"
       >
-        {children}
+        <AppProvider>
+          {children}
+        </AppProvider>
       </ThemeProvider>
     </SessionProvider>
   )

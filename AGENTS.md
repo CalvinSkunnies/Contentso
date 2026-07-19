@@ -79,9 +79,10 @@ src/
     layout.tsx              # Root: Inter + JetBrains Mono, Providers, Navbar, Footer
     globals.css             # Dark/light CSS variables, glass/grid/glow utilities
     page.tsx                # Landing page (Hero → Features → Q&A → Comparison → CTA)
-    dashboard/page.tsx      # Protected dashboard with quick-action cards (Calendar, Pipeline, etc.)
+    dashboard/page.tsx      # Protected dashboard with quick-action cards (Calendar, Pipeline, Script Studio, etc.)
     dashboard/calendar/page.tsx  # Content Calendar with back button
     dashboard/pipeline/page.tsx  # Pipeline Board with back button
+    dashboard/studio/page.tsx    # Script Studio with editor + linking
     auth/
       signin/page.tsx       # Google sign-in with official Google logo SVG
       error/page.tsx        # Auth error display
@@ -95,11 +96,17 @@ src/
     providers.tsx           # SessionProvider + ThemeProvider
     mode-toggle.tsx         # Dark/bright toggle
     pipeline/               # Kanban Pipeline Board
-      pipeline-board.tsx    # DndContext + 6 status columns
+      pipeline-board.tsx    # DndContext + 6 status columns (uses AppContext)
       pipeline-column.tsx   # Droppable column per status
+    studio/                 # Script Studio
+      script-editor.tsx     # Title, content, platform, link-to-content
+      script-list.tsx       # Sidebar list of saved scripts
+  context/
+    app-context.tsx         # Shared state: pipeline items + scripts (CRUD + linking)
   lib/
     auth.ts                 # NextAuth config (authOptions)
     utils.ts                # cn() helper
+    script-types.ts         # ScriptItem type + generateScriptId
   __tests__/                # 47 unit/component tests
   middleware.ts             # Protects /dashboard/* routes
 tests/e2e/                  # Playwright E2E tests
@@ -109,6 +116,16 @@ vercel.json
 tailwind.config.ts
 .github/workflows/ci.yml
 ```
+
+## Script Studio
+- **Page**: `/dashboard/studio`
+- **Layout**: Two-panel: left sidebar (script list) + right panel (editor)
+- **Scripts**: Title, content (monospace textarea), platform picker (IG/TikTok), link to pipeline content
+- **Linking**: Scripts can be linked to ContentItems from the pipeline via dropdown selector
+- **Pipeline integration**: Pipeline cards show "Script" badge if a script is linked; clicking navigates to studio
+- **Data sharing**: Uses `AppContext` — scripts and pipeline items share the same global state
+- **Components**: `ScriptList` (sidebar), `ScriptEditor` (title+content+platform+link), `AppProvider` (context wrapper)
+- **Types**: `src/lib/script-types.ts` (ScriptItem: id, title, content, platform, linkedContentId, linkedContentTitle, timestamps)
 
 ## AI Terminal (Gemini)
 - **Provider**: Google Gemini 2.0 Flash (free tier: 60 req/min)

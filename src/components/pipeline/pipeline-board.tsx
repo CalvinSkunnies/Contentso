@@ -16,14 +16,16 @@ import { sortableKeyboardCoordinates } from "@dnd-kit/sortable"
 import { PipelineColumn } from "./pipeline-column"
 import { AddContentDialog } from "@/components/calendar/add-content-dialog"
 import { DragOverlayContent } from "@/components/calendar/content-card"
-import { generateId, type ContentItem, type Platform, type ContentStatus } from "@/lib/calendar-types"
+import { type ContentItem, type Platform, type ContentStatus } from "@/lib/calendar-types"
 import { Button } from "@/components/ui/button"
-import { Plus } from "lucide-react"
+import { Plus, FileText } from "lucide-react"
+import { useApp } from "@/context/app-context"
+import Link from "next/link"
 
 const PIPELINE_STATUSES: ContentStatus[] = ["idea", "scripted", "filmed", "editing", "scheduled", "posted"]
 
 export function PipelineBoard() {
-  const [items, setItems] = useState<ContentItem[]>([])
+  const { pipelineItems, addPipelineItem, deletePipelineItem, setPipelineItems, scripts } = useApp()
   const [activeItem, setActiveItem] = useState<ContentItem | null>(null)
   const [addDialogOpen, setAddDialogOpen] = useState(false)
   const [addDialogStatus, setAddDialogStatus] = useState<ContentStatus>("idea")
@@ -36,10 +38,10 @@ export function PipelineBoard() {
   const handleDragStart = useCallback(
     (event: DragStartEvent) => {
       const id = event.active.id as string
-      const item = items.find((i) => i.id === id)
+      const item = pipelineItems.find((i) => i.id === id)
       if (item) setActiveItem(item)
     },
-    [items]
+    [pipelineItems]
   )
 
   const handleDragEnd = useCallback(
@@ -53,7 +55,7 @@ export function PipelineBoard() {
 
       if (activeId === overId) return
 
-      const activeItemData = items.find((i) => i.id === activeId)
+      const activeItemData = pipelineItems.find((i) => i.id === activeId)
       if (!activeItemData) return
 
       let targetStatus: ContentStatus | null = null
@@ -61,38 +63,41 @@ export function PipelineBoard() {
       if (typeof overId === "string" && overId.startsWith("pipeline-")) {
         targetStatus = overId.replace("pipeline-", "") as ContentStatus
       } else {
-        const overItem = items.find((i) => i.id === overId)
+        const overItem = pipelineItems.find((i) => i.id === overId)
         if (overItem) targetStatus = overItem.status
       }
 
       if (targetStatus && targetStatus !== activeItemData.status) {
-        setItems((prev) =>
+        setPipelineItems((prev) =>
           prev.map((item) =>
             item.id === activeId ? { ...item, status: targetStatus! } : item
           )
         )
       }
     },
-    [items]
+    [pipelineItems, setPipelineItems]
   )
 
-  const handleAdd = (data: { title: string; platform: Platform; status: ContentStatus; content?: string; media?: string; notes?: string }) => {
-    const newItem: ContentItem = {
-      id: generateId(),
-      day: new Date().getDay(),
-      ...data,
-    }
-    setItems((prev) => [...prev, newItem])
-  }
-
-  const handleDelete = useCallback((id: string) => {
-    setItems((prev) => prev.filter((item) => item.id !== id))
-  }, [])
+  const linkedScriptCount = scripts.filter((s) => s.linkedContentId).length
+  const getHasScript = useCallback((id: string) => scripts.some((s) => s.linkedContentId === id), [scripts])
 
   return (
     <div>
       <div className="flex items-center justify-between mb-3">
-        <span className="text-xs text-[var(--muted)]">{items.length} item{items.length !== 1 ? "s" : ""} in pipeline</span>
+        <div className="flex items-center gap-3">
+          <span className="text-xs text-[var(--muted)]">
+            {pipelineItems.length} item{pipelineItems.length !== 1 ? "s" : ""} in pipeline
+          </span>
+          {linkedScriptCount > 0 && (
+            <Link
+              href="/dashboard/studio"
+              className="text-xs text-[var(--secondary)] hover:underline flex items-center gap-1"
+            >
+              <FileText className="w-3 h-3" />
+              {linkedScriptCount} script{linkedScriptCount !== 1 ? "s" : ""} linked
+            </Link>
+          )}
+        </div>
         <Button
           size="sm"
           onClick={() => {
@@ -113,7 +118,7 @@ export function PipelineBoard() {
       >
         <div className="flex gap-3 overflow-x-auto pb-4">
           {PIPELINE_STATUSES.map((status) => {
-            const statusItems = items
+            const statusItems = pipelineItems
               .filter((item) => item.status === status)
               .sort((a, b) => (a.id < b.id ? -1 : 1))
             return (
@@ -121,7 +126,12 @@ export function PipelineBoard() {
                 key={status}
                 status={status}
                 items={statusItems}
-                onDelete={handleDelete}
+                onDelete={deletePipelineItem}
+                getHasScript={getHasScript}
+                onViewScript={(id) => {
+                  const script = scripts.find((s) => s.linkedContentId === id)
+                  if (script) window.open(`/dashboard/studio?script=${script.id}`, "_self")
+                }}
               />
             )
           })}
@@ -135,7 +145,7 @@ export function PipelineBoard() {
       <AddContentDialog
         open={addDialogOpen}
         onClose={() => setAddDialogOpen(false)}
-        onAdd={(data) => handleAdd({ ...data, status: addDialogStatus })}
+        onAdd={(data) => addPipelineItem({ ...data, status: addDialogStatus })}
       />
     </div>
   )

@@ -18,9 +18,9 @@ const quickActions = [
   },
   {
     title: "Script Studio",
-    desc: "Write AI-powered scripts",
+    desc: "Write & link scripts to content",
     icon: FileText,
-    href: "#",
+    href: "/dashboard/studio",
     color: "text-[var(--secondary)]",
   },
   {

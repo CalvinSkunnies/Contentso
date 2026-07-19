@@ -11,9 +11,11 @@ interface PipelineColumnProps {
   status: ContentStatus
   items: ContentItem[]
   onDelete?: (id: string) => void
+  getHasScript?: (id: string) => boolean
+  onViewScript?: (id: string) => void
 }
 
-export function PipelineColumn({ status, items, onDelete }: PipelineColumnProps) {
+export function PipelineColumn({ status, items, onDelete, getHasScript, onViewScript }: PipelineColumnProps) {
   const { setNodeRef, isOver } = useDroppable({
     id: `pipeline-${status}`,
     data: { type: "pipeline", status },
@@ -52,7 +54,13 @@ export function PipelineColumn({ status, items, onDelete }: PipelineColumnProps)
             </div>
           ) : (
             items.map((item) => (
-              <ContentCard key={item.id} item={item} onDelete={onDelete} />
+              <ContentCard
+                key={item.id}
+                item={item}
+                onDelete={onDelete}
+                hasScript={getHasScript?.(item.id)}
+                onViewScript={onViewScript}
+              />
             ))
           )}
         </SortableContext>

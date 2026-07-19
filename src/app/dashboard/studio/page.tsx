@@ -12,7 +12,6 @@ import { FileText } from "lucide-react"
 
 export default function StudioPage() {
   const { data: session, status } = useSession()
-  const router = useRouter()
   const searchParams = useSearchParams()
   const { scripts, addScript, deleteScript } = useApp()
   const [selectedId, setSelectedId] = useState<string | null>(null)
